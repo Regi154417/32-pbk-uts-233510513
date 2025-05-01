@@ -3,9 +3,16 @@
     <h1>🌴 Rencana Weekend</h1>
 
     <div class="input-container">
-      <input v-model="newPlan" @keyup.enter="addPlan" type="text" placeholder="Tambahkan rencana..." />
-      <button @click="addPlan">Tambah</button>
-    </div>
+  <input
+    v-model="newPlan"
+    @keyup.enter="addPlan"
+    type="text"
+    placeholder="Tambahkan rencana..."
+  />
+  <button @click="addPlan">Tambah</button>
+  <button @click="resetPlans" class="reset-button">Reset Semua</button>
+</div>
+
 
     <ul>
       <li v-for="(plan, index) in filteredPlans" :key="index">
