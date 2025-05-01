@@ -3,34 +3,41 @@
     <h1>🌴 Rencana Weekend</h1>
 
     <div class="input-container">
-  <input
-    v-model="newPlan"
-    @keyup.enter="addPlan"
-    type="text"
-    placeholder="Tambahkan rencana..."
-  />
-  <button @click="addPlan">Tambah</button>
-  <button @click="resetPlans" class="reset-button">Reset Semua</button>
-</div>
+      <input v-model="newPlan" @keyup.enter="addPlan" type="text" placeholder="Tambahkan rencana..." />
+      <button @click="addPlan">Tambah</button>
+      <button @click="resetPlans" class="reset-button">Reset Semua</button>
+    </div>
 
 
     <ul>
-      <li v-for="(plan, index) in filteredPlans" :key="index">
+      <li v-for="(plan, index) in filteredPlans" :key="index" class="plan-item">
         <input type="checkbox" v-model="plan.done" />
 
         <template v-if="plan.editing">
-          <input v-model="plan.text" @keyup.enter="saveEdit(plan)" class="edit-input" />
-          <button @click="saveEdit(plan)">Simpan</button>
-        </template>
-        <template v-else>
-          <span :style="{ textDecoration: plan.done ? 'line-through' : 'none', color: plan.done ? 'gray' : 'black' }">
-            {{ plan.text }}
-          </span>
-          <button @click="editPlan(plan)">Edit</button>
+          <div class="plan-content">
+            <input v-model="plan.text" @keyup.enter="saveEdit(plan)" class="edit-input" />
+          </div>
+          <div class="plan-actions">
+            <button @click="saveEdit(plan)">Simpan</button>
+          </div>
         </template>
 
-        <button @click="confirmDelete(index)">Hapus</button>
+        <template v-else>
+          <div class="plan-content">
+            <span :style="{ textDecoration: plan.done ? 'line-through' : 'none', color: plan.done ? 'gray' : 'black' }">
+              {{ plan.text }}
+            </span>
+            <small class="plan-date">🕒 {{ plan.date }}</small>
+          </div>
+          <div class="action-buttons">
+            <button @click="editPlan(plan)">Edit</button>
+            <button @click="confirmDelete(index)">Hapus</button>
+          </div>
+
+        </template>
       </li>
+
+
     </ul>
 
     <div class="filter-dropdown">
@@ -61,11 +68,11 @@ const newPlan = ref('');
 const filterStatus = ref('all');
 
 const plans = ref([
-  { text: 'Jalan-jalan ke taman kota', done: false, editing: false },
-  { text: 'Nonton film bareng teman', done: false, editing: false },
-  { text: 'Belanja kebutuhan kos', done: false, editing: false },
-  { text: 'Baca buku di kafe', done: false, editing: false },
-  { text: 'Main game online', done: false, editing: false }
+  { text: 'Jalan-jalan ke taman kota', done: false, editing: false, date: new Date().toLocaleString() },
+  { text: 'Nonton film bareng teman', done: false, editing: false, date: new Date().toLocaleString() },
+  { text: 'Belanja kebutuhan kos', done: false, editing: false, date: new Date().toLocaleString() },
+  { text: 'Baca buku di kafe', done: false, editing: false, date: new Date().toLocaleString() },
+  { text: 'Main game online', done: false, editing: false, date: new Date().toLocaleString() }
 ]);
 
 function addPlan() {
@@ -73,7 +80,12 @@ function addPlan() {
     alert('Rencana tidak boleh kosong!');
     return;
   }
-  plans.value.push({ text: newPlan.value, done: false, editing: false });
+  plans.value.push({
+    text: newPlan.value,
+    date: new Date().toLocaleString(),
+    done: false,
+    editing: false
+  });
   newPlan.value = '';
 }
 
