@@ -3,12 +3,7 @@
     <h1>🌴 Rencana Weekend</h1>
 
     <div class="input-container">
-      <input
-        v-model="newPlan"
-        @keyup.enter="addPlan"
-        type="text"
-        placeholder="Tambahkan rencana..."
-      />
+      <input v-model="newPlan" @keyup.enter="addPlan" type="text" placeholder="Tambahkan rencana..." />
       <button @click="addPlan">Tambah</button>
     </div>
 
@@ -32,22 +27,23 @@
     </ul>
 
     <div class="filter-dropdown">
-  <button @click="toggleDropdown">
-    🔽 Filter
-  </button>
-  <ul v-if="dropdownOpen" class="dropdown-menu">
-    <li @click="setFilter(false)">Tampilkan Semua Rencana</li>
-    <li @click="setFilter(true)">Tampilkan Belum Selesai</li>
-  </ul>
-</div>
+      <button @click="toggleDropdown">
+        🔽 Filter
+      </button>
+      <ul v-if="dropdownOpen" class="dropdown-menu">
+        <li @click="setFilter('all')">Tampilkan Semua Rencana</li>
+        <li @click="setFilter('incomplete')">Tampilkan Belum Selesai</li>
+        <li @click="setFilter('complete')">Tampilkan Sudah Selesai</li>
+      </ul>
+    </div>
 
   </div>
 
   <div class="footer-container">
-  <footer class="footer">
-    Made by Regi
-  </footer>
-</div>
+    <footer class="footer">
+      Made by Regi
+    </footer>
+  </div>
 </template>
 
 <script setup>
@@ -55,7 +51,7 @@ import { ref, computed } from 'vue';
 import './style.css';
 
 const newPlan = ref('');
-const showOnlyIncomplete = ref(false);
+const filterStatus = ref('all');
 
 const plans = ref([
   { text: 'Jalan-jalan ke taman kota', done: false, editing: false },
@@ -102,9 +98,15 @@ function saveEdit(plan) {
   plan.editing = false;
 }
 
-const filteredPlans = computed(() =>
-  showOnlyIncomplete.value ? plans.value.filter(plan => !plan.done) : plans.value
-);
+const filteredPlans = computed(() => {
+  if (filterStatus.value === 'incomplete') {
+    return plans.value.filter(plan => !plan.done);
+  } else if (filterStatus.value === 'complete') {
+    return plans.value.filter(plan => plan.done);
+  } else {
+    return plans.value;
+  }
+});
 
 const dropdownOpen = ref(false);
 
@@ -112,8 +114,8 @@ function toggleDropdown() {
   dropdownOpen.value = !dropdownOpen.value;
 }
 
-function setFilter(onlyIncomplete) {
-  showOnlyIncomplete.value = onlyIncomplete;
+function setFilter(status) {
+  filterStatus.value = status;
   dropdownOpen.value = false;
 }
 
