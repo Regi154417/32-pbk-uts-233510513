@@ -72,6 +72,7 @@ const plans = ref([
   { text: 'Nonton film bareng teman', done: false, editing: false, date: new Date().toLocaleString() },
   { text: 'Belanja kebutuhan kos', done: false, editing: false, date: new Date().toLocaleString() },
   { text: 'Baca buku di kafe', done: false, editing: false, date: new Date().toLocaleString() },
+  { text: 'Main game online', done: false, editing: false, date: new Date().toLocaleString() },
   { text: 'Main game online', done: false, editing: false, date: new Date().toLocaleString() }
 ]);
 
